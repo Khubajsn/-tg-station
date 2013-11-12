@@ -1,31 +1,3 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-// A datum for dealing with threshold limit values
-// used in /obj/machinery/alarm
-/datum/tlv
-	var/min2
-	var/min1
-	var/max1
-	var/max2
-	New(_min2 as num, _min1 as num, _max1 as num, _max2 as num)
-		min2 = _min2
-		min1 = _min1
-		max1 = _max1
-		max2 = _max2
-	proc/get_danger_level(curval as num)
-		if (max2 >=0 && curval>=max2)
-			return 2
-		if (min2 >=0 && curval<=min2)
-			return 2
-		if (max1 >=0 && curval>=max1)
-			return 1
-		if (min1 >=0 && curval<=min1)
-			return 1
-		return 0
-	proc/CopyFrom(datum/tlv/other)
-		min2 = other.min2
-		min1 = other.min1
-		max1 = other.max1
-		max2 = other.max2
 
 #define AALARM_MODE_SCRUBBING 1
 #define AALARM_MODE_VENTING 2 //makes draught
@@ -40,6 +12,40 @@
 #define AALARM_SCREEN_SENSORS 5
 
 #define AALARM_REPORT_TIMEOUT 100
+
+#define AALARM_DANGERLEVEL_GOOD 	0
+#define AALARM_DANGERLEVEL_WARNING	1
+#define AALARM_DANGERLEVEL_BAD		2
+
+// used in /obj/machinery/alarm
+/datum/tlv
+	var/bad_to_warn
+	var/warn_to_good
+	var/good_to_warn
+	var/warn_to_bad
+
+	// <- xxxxx|!!!!!!|......|!!!!!!|xxxxx ->
+	//     bad   warn   good   warn   bad
+
+	New(badToWarn as num, warnToGood as num, goodToWarn as num, warnToBad as num)
+		bad_to_warn		= badToWarn
+		warn_to_good	= warnToGood
+		good_to_warn	= goodToWarn
+		warn_to_bad		= warnToBad
+
+	proc/get_danger_level(val as num)
+		if (val <= bad_to_warn || val >= warn_to_bad)
+			return AALARM_DANGERLEVEL_BAD
+		if (val <= warn_to_good || val >= good_to_warn)
+			return AALARM_DANGERLEVEL_WARNING
+
+		return AALARM_DANGERLEVEL_GOOD
+
+	proc/CopyFrom(datum/tlv/other)
+		bad_to_warn		= other.bad_to_warn
+		warn_to_good	= other.warn_to_good
+		good_to_warn	= other.good_to_warn
+		warn_to_bad		= other.warn_to_bad
 
 /obj/machinery/alarm
 	name = "alarm"
