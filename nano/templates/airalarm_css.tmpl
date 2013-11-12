@@ -1,0 +1,156 @@
+<!--
+    Air Alarm - local CSS definition file.
+    Used by nano/templates/airalarm.tmpl.
+-->
+
+<style type="text/css">
+ul#menu {
+    width: 25%;
+    float: left;
+    padding: 0px;
+    margin-top: 10px;
+}
+
+ul#menu li {
+    list-style-type: none;
+    margin-bottom: 2px;
+}
+
+ul#menu li div.link {
+    padding: 4px;
+    font-size: 14px;
+    width: 100%;
+    border-left: none;
+}
+
+ul#menu li div.link div.uiIcon16 {
+    margin-right: 5px;
+}
+
+ul#menu li ul {
+    list-style-type: none;
+    width: 80%;
+    float: right;
+    padding: 0px;
+}
+
+ul#menu li ul div.link {
+    border: 1px solid #161616;
+}
+
+div#rightContent {
+    width: 72%;
+    float: right;
+    margin-top: 10px;
+}
+
+table.information {
+    border-collapse: collapse;
+    width: 95%;
+    margin-bottom: 10px;
+}
+
+table.information td {
+    height: 22px;
+    width: 25%;
+    background: #222222;
+    padding-right: 5px;
+    border: 1px solid #000000;
+    border-left: none;
+    text-align: right;
+    font-weight: bold;
+}
+
+table.information td.label {
+    border-left: 1px solid #000000 !important;
+    border-right: none !important;
+    width: 75%;
+    text-align: left !important;
+    font-weight: normal;
+    padding-left: 5px;
+}
+
+table.information td.value div.link {
+    float: right;
+    margin: 0px;
+}
+
+table.information tr.odd td {
+    background: #333333;   
+}
+
+div.marginBottom {
+    margin-bottom: 10px;
+}
+
+table.switchContainer {
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    margin: 5px 10px 10px 0px;
+    float: left;
+}
+
+table.switchContainer.power {
+    width: 50px;
+}
+
+table.switchContainer td {
+    text-align: center;
+    border-bottom: 1px solid #000000;
+    font-family: Consolas, Courier New;
+    font-size: 14px;
+    color: #888888;
+    min-width: 50px;
+    border: 1px solid #000000;
+    padding: 0px;
+}
+
+table.switchContainer td a {
+    color: #AAAAAA;
+    display: block;
+    border: none;
+    margin: 0px;
+    padding-top: 5px;
+    cursor: pointer;
+    float: none;
+}
+
+table.switchContainer td.active a {
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+table.switchContainer td a:hover {
+    font-weight: bold;
+    color: #FFFFFF;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+table.switchContainer td.inactive a.on {
+    background: #005800;
+}
+
+table.switchContainer td.active a.on {
+    background: #4E7427;   
+}
+
+table.switchContainer td.inactive a.off {
+    background: #580000;
+}
+
+table.switchContainer td.active a.off {
+    background: #A41C26;
+}
+
+table.switchContainer td.label {
+    background: #222222;
+    color: #CDAD7A;
+    text-align: center;
+    word-wrap: break-word;
+    min-height: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #555555;
+}
+</style>
