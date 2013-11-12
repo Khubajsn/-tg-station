@@ -7,9 +7,9 @@
 
 #define AALARM_REPORT_TIMEOUT 100
 
-#define AALARM_DANGERLEVEL_GOOD 	1
-#define AALARM_DANGERLEVEL_WARNING	2
-#define AALARM_DANGERLEVEL_BAD		3
+#define AALARM_DANGERLEVEL_GOOD 	0
+#define AALARM_DANGERLEVEL_WARNING	1
+#define AALARM_DANGERLEVEL_BAD		2
 
 // used in /obj/machinery/alarm
 /datum/tlv
@@ -274,16 +274,57 @@
 	tplData["info"]["alarm"] = alarm_area.atmosalm && max_danger_level != AALARM_DANGERLEVEL_GOOD
 	tplData["info"]["otherAlarmInArea"] = alarm_area.atmosalm && max_danger_level == AALARM_DANGERLEVEL_GOOD
 
+	var/list/scrubberCollection = tplData["info"]["devices"]["scrubbers"]
+	if (alarm_area.air_scrub_names.len)
+		for (var/id_tag in alarm_area.air_scrub_names)
+			var/list/scrubberInfo = alarm_area.air_scrub_info[id_tag]
+			var/list/scrubberData = list(
+				"name" = alarm_area.air_scrub_names[id_tag],
+				"power" = scrubberInfo["power"],
+				"mode" = scrubberInfo["scrubbing"] ? "scrubbing" : "syphoning",
+				"settings" = list(
+					"co2" = scrubberInfo["filter_co2"],
+					"n2o" = scrubberInfo["filter_n2o"],
+					"toxins" = scrubberInfo["filter_toxins"]
+				)
+			)
+
+			scrubberCollection.Add(scrubberData)
+
+	var/list/ventCollection	= tplData["info"]["devices"]["vents"]
+	if (alarm_area.air_vent_names.len)
+		for (var/id_tag in alarm_area.air_vent_names)
+			var/list/ventInfo = alarm_area.air_vent_info[id_tag]
+			var/list/ventData = list(
+				"name" = alarm_area.air_vent_names[id_tag],
+				"power" = ventInfo["power"],
+				"checks" = list(
+					"external" = ventInfo["checks"] & 1,
+					"internal" = ventInfo["checks"] & 2
+				),
+				"pressure" = ventInfo["external"]
+ 			)
+
+ 			ventCollection.Add(ventData)
+
+
 	var/datum/nanoui/ui = nanomanager.get_open_ui(user, src, "main")
 
-	if (ui)
-		ui.push_data(tplData)
-		return
-	else
+	if (!ui)
 		ui = new(user, src, ui_key, "airalarm.tmpl", "[alarm_area.name] Air Alarm", 500, 500)
 		ui.set_initial_data(tplData)
-		ui.open()
+		ui.use_on_close_logic(0)
 		ui.set_auto_update(1)
+		ui.add_stylesheet("airalarms.css")
+		ui.add_template("scrubberTemplate", "airalarm_scrubber.tmpl")
+		ui.add_template("ventTemplate", "airalarm_vent.tmpl")
+		ui.add_template("sensorsTemplate", "airalarm_sensors.tmpl")
+		ui.add_template("devicesTemplate", "airalarm_devices.tmpl")
+		ui.add_template("infoTemplate", "airalarm_info.tmpl")
+		ui.add_template("masterTemplate", "airalarm.tmpl")
+		ui.open()
+	else
+		ui.push_data(tplData)
 		return
 
 /obj/machinery/alarm/proc/shock(mob/user, prb)
@@ -332,36 +373,6 @@
 //			world << text("Signal [] Broadcasted to []", command, target)
 
 	return 1
-
-
-/*
-	var/datum/tlv/cur_tlv
-	var/GET_PP = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
-
-	cur_tlv = TLV["pressure"]
-	var/environment_pressure = environment.return_pressure()
-	var/pressure_dangerlevel = cur_tlv.get_danger_level(environment_pressure)
-
-	cur_tlv = TLV["oxygen"]
-	var/oxygen_dangerlevel = cur_tlv.get_danger_level(environment.oxygen*GET_PP)
-	var/oxygen_percent = round(environment.oxygen / total * 100, 2)
-
-	cur_tlv = TLV["carbon dioxide"]
-	var/co2_dangerlevel = cur_tlv.get_danger_level(environment.carbon_dioxide*GET_PP)
-	var/co2_percent = round(environment.carbon_dioxide / total * 100, 2)
-
-	cur_tlv = TLV["plasma"]
-	var/plasma_dangerlevel = cur_tlv.get_danger_level(environment.toxins*GET_PP)
-	var/plasma_percent = round(environment.toxins / total * 100, 2)
-
-	cur_tlv = TLV["other"]
-	var/other_moles = 0.0
-	for(var/datum/gas/G in environment.trace_gases)
-		other_moles+=G.moles
-	var/other_dangerlevel = cur_tlv.get_danger_level(other_moles*GET_PP)
-
-	cur_tlv = TLV["temperature"]
-	var/temperature_dangerlevel = cur_tlv.get_danger_level(environment.temperature) */
 
 /obj/machinery/alarm/proc/apply_mode()
 	switch(mode)

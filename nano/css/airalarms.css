@@ -1,9 +1,7 @@
-<!--
-    Air Alarm - local CSS definition file.
-    Used by nano/templates/airalarm.tmpl.
--->
+/*
+    Used by nano/templates/airalarm*    
+*/
 
-<style type="text/css">
 ul#menu {
     width: 25%;
     float: left;
@@ -153,4 +151,3 @@ table.switchContainer td.label {
     text-transform: uppercase;
     border-bottom: 2px solid #555555;
 }
-</style>
