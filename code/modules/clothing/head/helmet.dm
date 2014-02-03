@@ -10,6 +10,26 @@
 	min_cold_protection_temperature = HELMET_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
+	
+obj/item/clothing/head/helmet/redtaghelm
+	name = "Red LaserTag Helmet"
+	desc = "They have chosen their own end."
+	icon_state = "redtaghelm"
+	flags = HEADCOVERSEYES
+	item_state = "redtaghelm"
+	armor = list(melee = 30, bullet = 10, laser = 20,energy = 10, bomb = 20, bio = 0, rad = 0)
+	// Offer about the same protection as a hardhat.
+	flags_inv = HIDEEARS|HIDEEYES
+	
+obj/item/clothing/head/helmet/bluetaghelm
+	name = "Blue LaserTag Helmet"
+	desc = "They'll need more men."
+	icon_state = "bluetaghelm"
+	flags = HEADCOVERSEYES
+	item_state = "bluetaghelm"
+	armor = list(melee = 30, bullet = 10, laser = 20,energy = 10, bomb = 20, bio = 0, rad = 0)
+	// Offer about the same protection as a hardhat.
+	flags_inv = HIDEEARS|HIDEEYES
 
 /obj/item/clothing/head/helmet/HoS
 	name = "head of security hat"
